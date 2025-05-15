@@ -1,54 +1,51 @@
-package com.example.pamasahe.navigation_fragments.history;
+package com.example.pamasahe.navigation_fragments.fare;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.pamasahe.R;
 import com.example.pamasahe.classes.RideConfirmation;
-
 import java.util.List;
 
 public class RideAdapter extends RecyclerView.Adapter<RideAdapter.RideViewHolder> {
 
-    private List<RideConfirmation> rideList;
+    private List<RideConfirmation> historyList;
 
-    public RideAdapter(List<RideConfirmation> rideList) {
-        this.rideList = rideList;
-    }
-
-    @NonNull
-    @Override
-    public RideViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_ride, parent, false);
-        return new RideViewHolder(view);
+    public RideAdapter(List<RideConfirmation> historyList) {
+        this.historyList = historyList;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RideViewHolder holder, int position) {
-        RideConfirmation ride = rideList.get(position);
-        holder.from.setText("From: " + ride.getFrom());
-        holder.to.setText("To: " + ride.getTo());
-        holder.price.setText(ride.getFinalPrice());
+    public RideViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_ride, parent, false);
+        return new RideViewHolder(itemView);
+    }
+
+    @Override
+    public void onBindViewHolder(RideViewHolder holder, int position) {
+        RideConfirmation ride = historyList.get(position);
+
+        holder.fromText.setText(ride.getFrom());
+        holder.toText.setText(ride.getTo());
+        holder.dateText.setText(ride.getDateTime());  // Make sure you have a dateTime field
     }
 
     @Override
     public int getItemCount() {
-        return rideList.size();
+        return historyList.size();
     }
 
-    public static class RideViewHolder extends RecyclerView.ViewHolder {
-        TextView from, to, price;
+    public class RideViewHolder extends RecyclerView.ViewHolder {
+        public TextView fromText, toText, dateText;
 
-        public RideViewHolder(@NonNull View itemView) {
-            super(itemView);
-            from = itemView.findViewById(R.id.fromText);
-            to = itemView.findViewById(R.id.toText);
-            price = itemView.findViewById(R.id.priceText);
+        public RideViewHolder(View view) {
+            super(view);
+            fromText = view.findViewById(R.id.fromText);
+            toText = view.findViewById(R.id.toText);
+            dateText = view.findViewById(R.id.dateText);
         }
     }
 }

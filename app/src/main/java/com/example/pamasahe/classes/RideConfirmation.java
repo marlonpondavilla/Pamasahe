@@ -8,20 +8,34 @@ public class RideConfirmation {
     private String originalPrice;
     private String finalPrice;
     private String discountType;
+    private String dateTime; // New field for storing date and time
 
-    // Default constructor required for Firebase
-    public RideConfirmation() {}
+    public RideConfirmation() {
+        // Default constructor for Firebase
+    }
 
-    // Updated constructor with all parameters except id
-    public RideConfirmation(String from, String to, String duration, String originalPrice, String finalPrice, String discountType) {
+    // Updated constructor with all parameters (7 parameters)
+    public RideConfirmation(String from, String to, String duration, String originalPrice,
+                            String finalPrice, String discountType, String dateTime) {
         this.from = from;
         this.to = to;
         this.duration = duration;
         this.originalPrice = originalPrice;
         this.finalPrice = finalPrice;
         this.discountType = discountType;
+        this.dateTime = dateTime;
     }
 
+    // Getter and setter for the new dateTime field
+    public String getDateTime() {
+        return dateTime;
+    }
+
+    public void setDateTime(String dateTime) {
+        this.dateTime = dateTime;
+    }
+
+    // Other getters and setters
     public String getId() {
         return id;
     }
@@ -30,7 +44,6 @@ public class RideConfirmation {
         this.id = id;
     }
 
-    // Other Getters and Setters
     public String getFrom() {
         return from;
     }

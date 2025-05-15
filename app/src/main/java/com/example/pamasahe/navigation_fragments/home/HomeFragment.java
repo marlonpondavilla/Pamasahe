@@ -124,7 +124,7 @@ public class HomeFragment extends Fragment {
 
             if (userId != null) {
                 // Prepare the ride data
-                RideConfirmation ride = new RideConfirmation(from, to, duration, originalPriceConf, finalPrice, discountType);
+                RideConfirmation ride = new RideConfirmation(from, to, duration, originalPriceConf, finalPrice, discountType, "");
 
                 // Reference to the RDB
                 DatabaseReference database = FirebaseDatabase.getInstance().getReference("confirmRides");

@@ -1,30 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/historyFragmentLayout"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-    android:background="@android:color/white">
+    android:layout_height="match_parent">
 
-    <!-- Header Text -->
     <TextView
-        android:id="@+id/historyHeader"
-        android:layout_width="match_parent"
+        android:id="@+id/historyHeaderText"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Ride History"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:textColor="#212121"
-        android:gravity="center"
-        android:paddingBottom="12dp"
-        android:paddingTop="8dp" />
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp" />
 
-    <!-- RecyclerView for Ride List -->
+    <TextView
+        android:id="@+id/loadingText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Loading..."
+        android:textSize="18sp"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/noConfirmedRidesText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No Rides Available"
+        android:textSize="18sp"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/historyRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:clipToPadding="false" />
-</LinearLayout>
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/historyHeaderText"/>
+
+</RelativeLayout>
