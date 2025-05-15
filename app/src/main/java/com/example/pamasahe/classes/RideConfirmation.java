@@ -1,7 +1,7 @@
 package com.example.pamasahe.classes;
 
 public class RideConfirmation {
-    private String id; // 🔴 Add this field
+    private String id;
     private String from;
     private String to;
     private String duration;
@@ -22,7 +22,6 @@ public class RideConfirmation {
         this.discountType = discountType;
     }
 
-    // ✅ Getter & Setter for ID
     public String getId() {
         return id;
     }

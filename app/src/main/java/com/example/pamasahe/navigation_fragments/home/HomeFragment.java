@@ -132,7 +132,7 @@ public class HomeFragment extends Fragment {
                 // Save ride data under the user's unique ID
                 DatabaseReference rideRef = database.child(userId).push();
                 String rideId = rideRef.getKey();
-                ride.setId(rideId); // Set the ID in the object
+                ride.setId(rideId);
 
                 rideRef.setValue(ride)
                         .addOnCompleteListener(task -> {
