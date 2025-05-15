@@ -3,6 +3,7 @@ package com.example.pamasahe.navigation_fragments.home;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,6 +18,15 @@ import java.util.List;
 public class VehicleAdapter extends RecyclerView.Adapter<VehicleAdapter.VehicleViewHolder> {
 
     private List<Vehicle> vehicleList;
+    private OnVehicleButtonClickListener listener;
+
+    public interface OnVehicleButtonClickListener {
+        void onTakeRideClick(Vehicle vehicle);
+    }
+
+    public void setOnVehicleButtonClickListener(OnVehicleButtonClickListener listener) {
+        this.listener = listener;
+    }
 
     public VehicleAdapter(List<Vehicle> vehicleList) {
         this.vehicleList = vehicleList;
@@ -38,6 +48,12 @@ public class VehicleAdapter extends RecyclerView.Adapter<VehicleAdapter.VehicleV
         holder.durationText.setText(vehicle.getDuration());
         holder.priceText.setText(vehicle.getPrice());
         holder.vehicleImage.setImageResource(vehicle.getImageResId());
+
+        holder.takeRideBtn.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onTakeRideClick(vehicle);
+            }
+        });
     }
 
     @Override
@@ -48,6 +64,7 @@ public class VehicleAdapter extends RecyclerView.Adapter<VehicleAdapter.VehicleV
     public static class VehicleViewHolder extends RecyclerView.ViewHolder {
         TextView fromText, toText, durationText, priceText;
         ImageView vehicleImage;
+        Button takeRideBtn;
 
         public VehicleViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -56,6 +73,7 @@ public class VehicleAdapter extends RecyclerView.Adapter<VehicleAdapter.VehicleV
             durationText = itemView.findViewById(R.id.durationText);
             priceText = itemView.findViewById(R.id.priceText);
             vehicleImage = itemView.findViewById(R.id.vehicleImage);
+            takeRideBtn = itemView.findViewById(R.id.takeRideBtn);
         }
     }
 }
