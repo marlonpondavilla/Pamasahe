@@ -1,9 +1,11 @@
 package com.example.pamasahe.navigation_fragments.fare;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 import android.widget.TextView;
 
@@ -54,7 +56,8 @@ public class FareFragment extends Fragment {
         rideConfirmationAdapter.setOnItemActionListener(new RideConfirmationAdapter.OnItemActionListener() {
             @Override
             public void onPayClick(RideConfirmation ride) {
-                // We’ll handle this later.
+                // 👇 Call showPayDialog here
+                showPayDialog(ride);
             }
 
             @Override
@@ -155,5 +158,60 @@ public class FareFragment extends Fragment {
                     });
         }
     }
+
+    private void showPayDialog(RideConfirmation ride) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_pay_confirmation, null);
+        builder.setView(dialogView);
+
+        TextView fromToText = dialogView.findViewById(R.id.fromToText);
+
+        Button arriveButton = dialogView.findViewById(R.id.arriveButton);
+        Button cancelButton = dialogView.findViewById(R.id.cancelButton);
+
+        fromToText.setText(ride.getFrom() + " → " + ride.getTo());
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        // Handle "Arrive" button click
+        arriveButton.setOnClickListener(v -> {
+            // Handle the "Arrive" button action and add to the database under a unique ID
+            addRideToDatabaseWithUniqueId(ride);
+            dialog.dismiss();
+            deleteRide(ride);
+        });
+
+        // Handle "Cancel" button click
+        cancelButton.setOnClickListener(v -> {
+            dialog.dismiss();
+        });
+    }
+
+    private void addRideToDatabaseWithUniqueId(RideConfirmation ride) {
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        String userId = auth.getCurrentUser() != null ? auth.getCurrentUser().getUid() : null;
+
+        if (userId != null) {
+            // Reference to the RDB
+            DatabaseReference database = FirebaseDatabase.getInstance().getReference("arrivedRides");
+
+            // Use push() to create a unique ID for the new ride
+            DatabaseReference newRideRef = database.child(userId).push();
+
+            // Save the ride data under the generated unique ID
+            newRideRef.setValue(ride)
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(getContext(), "You arrived safely. Have a nice day ahead!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getContext(), "Failed to add ride. Try again!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            Toast.makeText(getContext(), "User not authenticated. Please sign in first.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
 }

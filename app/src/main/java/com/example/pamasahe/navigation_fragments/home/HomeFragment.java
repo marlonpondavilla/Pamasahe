@@ -137,7 +137,7 @@ public class HomeFragment extends Fragment {
                 rideRef.setValue(ride)
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
-                                Toast.makeText(getContext(), "Ride confirmed and saved!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "Ride added!", Toast.LENGTH_SHORT).show();
                                 dialog.dismiss();
                             } else {
                                 Toast.makeText(getContext(), "Failed to confirm ride. Try again!", Toast.LENGTH_SHORT).show();

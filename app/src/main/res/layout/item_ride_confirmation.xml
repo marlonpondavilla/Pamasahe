@@ -26,7 +26,7 @@
     <Button android:id="@+id/payBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Pay"
+        android:text="Confirm Ride"
         android:layout_gravity="end"
         android:layout_marginTop="8dp"
         android:backgroundTint="#4CAF50"
