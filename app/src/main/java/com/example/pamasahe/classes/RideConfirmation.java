@@ -8,9 +8,10 @@ public class RideConfirmation {
     private String finalPrice;
     private String discountType;
 
-    // Default constructor (needed for Firebase)
+    // Default constructor required for Firebase
     public RideConfirmation() {}
 
+    // Constructor with all parameters
     public RideConfirmation(String from, String to, String duration, String originalPrice, String finalPrice, String discountType) {
         this.from = from;
         this.to = to;
@@ -20,7 +21,7 @@ public class RideConfirmation {
         this.discountType = discountType;
     }
 
-    // Getters and setters
+    // Getters and setters for all the fields
     public String getFrom() {
         return from;
     }
@@ -69,4 +70,3 @@ public class RideConfirmation {
         this.discountType = discountType;
     }
 }
-

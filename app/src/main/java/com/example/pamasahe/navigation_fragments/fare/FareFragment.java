@@ -1,66 +1,103 @@
 package com.example.pamasahe.navigation_fragments.fare;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pamasahe.R;
+import com.example.pamasahe.classes.RideConfirmation;
+import com.example.pamasahe.navigation_fragments.fare.RideConfirmationAdapter;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link FareFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.ArrayList;
+import java.util.List;
+
 public class FareFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private RecyclerView rideRecyclerView;
+    private RideConfirmationAdapter rideConfirmationAdapter;
+    private List<RideConfirmation> rideConfirmationList;
+    private TextView loadingText;
 
     public FareFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FareFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static FareFragment newInstance(String param1, String param2) {
-        FareFragment fragment = new FareFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_fare, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_fare, container, false);
+
+        rideRecyclerView = rootView.findViewById(R.id.rideRecyclerView);
+        rideRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        loadingText = rootView.findViewById(R.id.loadingText);
+
+        rideConfirmationList = new ArrayList<>();
+        rideConfirmationAdapter = new RideConfirmationAdapter(rideConfirmationList);
+        rideRecyclerView.setAdapter(rideConfirmationAdapter);
+
+        // Fetch data from Firebase
+        fetchConfirmedRides();
+
+        return rootView;
+    }
+
+    private void fetchConfirmedRides() {
+        // Show loading text
+        loadingText.setVisibility(View.VISIBLE);
+
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        String userId = auth.getCurrentUser() != null ? auth.getCurrentUser().getUid() : null;
+
+        if (userId != null) {
+            DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("confirmRides").child(userId);
+
+            // Fetch data using addListenerForSingleValueEvent
+            databaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        rideConfirmationList.clear(); // Clear the list before adding new data
+
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            RideConfirmation ride = snapshot.getValue(RideConfirmation.class);
+                            if (ride != null) {
+                                rideConfirmationList.add(ride);
+                            }
+                        }
+
+                        // Notify the adapter that data has changed
+                        rideConfirmationAdapter.notifyDataSetChanged();
+                    } else {
+                        Toast.makeText(getContext(), "No confirmed rides available", Toast.LENGTH_SHORT).show();
+                    }
+
+                    // Hide the loading text once the data is fetched
+                    loadingText.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    // Handle error
+                    Toast.makeText(getContext(), "Failed to load confirmed rides", Toast.LENGTH_SHORT).show();
+
+                    // Hide the loading text if data fetching fails
+                    loadingText.setVisibility(View.GONE);
+                }
+            });
+        }
     }
 }
