@@ -29,7 +29,7 @@ public class FareFragment extends Fragment {
     private RecyclerView rideRecyclerView;
     private RideConfirmationAdapter rideConfirmationAdapter;
     private List<RideConfirmation> rideConfirmationList;
-    private TextView loadingText;
+    private TextView loadingText, noRidesText;
 
     public FareFragment() {
         // Required empty public constructor
@@ -44,6 +44,7 @@ public class FareFragment extends Fragment {
         rideRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         loadingText = rootView.findViewById(R.id.loadingText);
+        noRidesText = rootView.findViewById(R.id.noConfirmedRidesText);
 
         rideConfirmationList = new ArrayList<>();
         rideConfirmationAdapter = new RideConfirmationAdapter(rideConfirmationList);
@@ -58,6 +59,7 @@ public class FareFragment extends Fragment {
     private void fetchConfirmedRides() {
         // Show loading text
         loadingText.setVisibility(View.VISIBLE);
+        noRidesText.setVisibility(View.GONE);
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
         String userId = auth.getCurrentUser() != null ? auth.getCurrentUser().getUid() : null;
@@ -83,6 +85,7 @@ public class FareFragment extends Fragment {
                         rideConfirmationAdapter.notifyDataSetChanged();
                     } else {
                         Toast.makeText(getContext(), "No confirmed rides available", Toast.LENGTH_SHORT).show();
+                        noRidesText.setVisibility(View.VISIBLE);
                     }
 
                     // Hide the loading text once the data is fetched
