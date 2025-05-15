@@ -1,0 +1,101 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:padding="12dp"
+    android:layout_marginBottom="16dp"
+    android:elevation="4dp">
+
+    <ImageView
+        android:id="@+id/vehicleImage"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/jeepney_front"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true" />
+
+    <LinearLayout
+        android:id="@+id/fromToLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_toEndOf="@id/vehicleImage"
+        android:layout_alignTop="@id/vehicleImage"
+        android:layout_marginStart="12dp">
+
+        <TextView
+            android:id="@+id/fromText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="From"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#000" />
+
+        <TextView
+            android:id="@+id/caret"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" → "
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#000" />
+
+        <TextView
+            android:id="@+id/toText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="To"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#000" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/durationIcon"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:src="@drawable/duration_img"
+        android:layout_below="@id/fromToLayout"
+        android:layout_toEndOf="@id/vehicleImage"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="6dp" />
+
+    <TextView
+        android:id="@+id/durationText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="24 min"
+        android:textSize="14sp"
+        android:textColor="#444"
+        android:layout_toEndOf="@id/durationIcon"
+        android:layout_alignTop="@id/durationIcon"
+        android:layout_marginStart="6dp" />
+
+    <Button
+        android:id="@+id/takeRideBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:text="Take a Ride"
+        android:textSize="14sp"
+        android:backgroundTint="#3E7B27"
+        android:textColor="@android:color/white"
+        android:layout_below="@id/durationIcon"
+        android:layout_toEndOf="@id/vehicleImage"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="12dp" />
+
+    <TextView
+        android:id="@+id/priceText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="₱120"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="#000000"
+        android:layout_alignTop="@id/takeRideBtn"
+        android:layout_toEndOf="@id/takeRideBtn"
+        android:layout_marginStart="16dp" />
+
+</RelativeLayout>
