@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -49,6 +50,20 @@ public class FareFragment extends Fragment {
         rideConfirmationList = new ArrayList<>();
         rideConfirmationAdapter = new RideConfirmationAdapter(rideConfirmationList);
         rideRecyclerView.setAdapter(rideConfirmationAdapter);
+
+        rideConfirmationAdapter.setOnItemActionListener(new RideConfirmationAdapter.OnItemActionListener() {
+            @Override
+            public void onPayClick(RideConfirmation ride) {
+                // We’ll handle this later.
+            }
+
+            @Override
+            public void onDeleteClick(RideConfirmation ride) {
+                // 👇 Call deleteRide here
+                deleteRide(ride);
+            }
+        });
+
 
         // Fetch data from Firebase
         fetchConfirmedRides();
@@ -103,4 +118,42 @@ public class FareFragment extends Fragment {
             });
         }
     }
+
+    private void deleteRide(RideConfirmation ride) {
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        String userId = auth.getCurrentUser() != null ? auth.getCurrentUser().getUid() : null;
+
+        if (userId != null) {
+            DatabaseReference ref = FirebaseDatabase.getInstance()
+                    .getReference("confirmRides")
+                    .child(userId);
+
+            ref.orderByChild("from").equalTo(ride.getFrom())  // Base filter
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            for (DataSnapshot child : snapshot.getChildren()) {
+                                RideConfirmation r = child.getValue(RideConfirmation.class);
+
+                                if (r != null &&
+                                        r.getTo().equals(ride.getTo()) &&
+                                        r.getDuration().equals(ride.getDuration()) &&
+                                        r.getFinalPrice().equals(ride.getFinalPrice())) {
+
+                                    child.getRef().removeValue();
+                                    Toast.makeText(getContext(), "Ride deleted", Toast.LENGTH_SHORT).show();
+                                    fetchConfirmedRides();
+                                    return;
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            Toast.makeText(getContext(), "Failed to delete ride", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
+    }
+
 }

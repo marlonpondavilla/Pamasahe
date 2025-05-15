@@ -31,4 +31,13 @@
         android:layout_marginTop="8dp"
         android:backgroundTint="#4CAF50"
         android:textColor="#FFFFFF"/>
+
+    <ImageButton
+        android:id="@+id/deleteBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@android:drawable/ic_menu_delete"
+        android:background="#F7374F"
+        android:contentDescription="Delete ride"
+        android:layout_marginStart="8dp" />
 </LinearLayout>

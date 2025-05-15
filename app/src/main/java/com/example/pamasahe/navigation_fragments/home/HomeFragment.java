@@ -130,7 +130,11 @@ public class HomeFragment extends Fragment {
                 DatabaseReference database = FirebaseDatabase.getInstance().getReference("confirmRides");
 
                 // Save ride data under the user's unique ID
-                database.child(userId).push().setValue(ride)
+                DatabaseReference rideRef = database.child(userId).push();
+                String rideId = rideRef.getKey();
+                ride.setId(rideId); // Set the ID in the object
+
+                rideRef.setValue(ride)
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 Toast.makeText(getContext(), "Ride confirmed and saved!", Toast.LENGTH_SHORT).show();
@@ -143,6 +147,5 @@ public class HomeFragment extends Fragment {
                 Toast.makeText(getContext(), "User not authenticated. Please sign in first.", Toast.LENGTH_SHORT).show();
             }
         });
-
     }
 }
