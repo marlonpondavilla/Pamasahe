@@ -16,6 +16,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.example.pamasahe.Kilometer;
 import com.example.pamasahe.Login;
 import com.example.pamasahe.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -29,7 +30,7 @@ import java.net.URL;
 
 public class AccountFragment extends Fragment {
 
-    private Button logoutButton;
+    private Button logoutButton, kilometerButton;
     private ImageView profileImage;
     private TextView userNameText;
 
@@ -54,8 +55,14 @@ public class AccountFragment extends Fragment {
         profileImage = view.findViewById(R.id.profileImage);
         userNameText = view.findViewById(R.id.userNameText);
         logoutButton = view.findViewById(R.id.logoutButton);
+        kilometerButton = view.findViewById(R.id.kilometerButton);
 
         logoutButton.setOnClickListener(v -> performLogout());
+
+        kilometerButton.setOnClickListener(v -> {
+            Intent intent = new Intent(requireActivity(), Kilometer.class);
+            startActivity(intent);
+        });
 
         displayUserInfo();
 
